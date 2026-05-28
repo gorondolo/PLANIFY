@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Planify - Tareas</title>
+ 
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" />
+ 
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@500;600;700&display=swap" rel="stylesheet" />
+ 
+  <link rel="stylesheet" href="css/Styles.css" />
+</head>
+<body>
+ 
+  <!-- =================== NAVBAR =================== -->
+  <nav class="navbar planify-navbar" role="navigation" aria-label="main navigation">
+    <div class="navbar-brand">
+      <div class="navbar-item">
+        <i class="bi bi-calendar2-check-fill mr-2"></i>
+        <strong>Planify</strong>
+      </div>
+      <a role="button" class="navbar-burger" id="navbar-burger" aria-label="menu">
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+      </a>
+    </div>
+ 
+    <div class="navbar-menu" id="navbarMenu">
+      <div class="navbar-start is-hidden-desktop">
+        <a class="navbar-item" href="index.html"><i class="bi bi-house-door mr-2"></i>Dashboard</a>
+        <a class="navbar-item" href="tareas.html"><i class="bi bi-list-check mr-2"></i>Tareas</a>
+        <a class="navbar-item" href="materias.html"><i class="bi bi-book mr-2"></i>Materias</a>
+        <a class="navbar-item" href="calendario.html"><i class="bi bi-calendar3 mr-2"></i>Calendario</a>
+      </div>
+ 
+      <div class="navbar-end">
+        <div class="navbar-item">
+          <span id="usuario-nombre"><i class="bi bi-person-circle mr-2"></i>Usuario</span>
+        </div>
+        <div class="navbar-item">
+          <a href="javascript:logout()" class="button is-small is-light" title="Cerrar sesión">
+            <i class="bi bi-box-arrow-right"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </nav>
+ 
+  <div class="columns is-gapless m-0">
+ 
+    <aside class="column is-2 planify-sidebar is-hidden-touch">
+      <div class="menu p-4">
+        <p class="menu-label">Navegación</p>
+        <ul class="menu-list">
+          <li><a href="index.html"><i class="bi bi-house-door mr-2"></i>Dashboard</a></li>
+          <li><a class="is-active" href="javascript:void(0)" style="cursor: default;"><i class="bi bi-list-check mr-2"></i>Tareas</a></li>
+          <li><a href="materias.html"><i class="bi bi-book mr-2"></i>Materias</a></li>
+          <li><a href="calendario.html"><i class="bi bi-calendar3 mr-2"></i>Calendario</a></li>
+        </ul>
+      </div>
+    </aside>
+ 
+    <main class="column planify-main p-5">
+ 
+      <!-- Header -->
+      <div class="level mb-5 is-mobile">
+        <div class="level-left">
+          <div>
+            <h1 class="title is-3 mb-1">Mis Tareas</h1>
+            <p class="subtitle is-6 has-text-grey">Gestiona todas tus tareas pendientes</p>
+          </div>
+        </div>
+        <div class="level-right">
+          <button class="button btn-planify-primary" id="btn-nueva-tarea">
+            <i class="bi bi-plus-lg mr-1"></i> Nueva tarea
+          </button>
+        </div>
+      </div>
+
+      <!-- Filtros -->
+      <div class="mb-4">
+        <div class="buttons">
+          <button class="button is-light" onclick="filtrarTareas('todas')">Todas</button>
+          <button class="button is-light" onclick="filtrarTareas('pendientes')">Pendientes</button>
+          <button class="button is-light" onclick="filtrarTareas('completadas')">Completadas</button>
+          <button class="button is-light" onclick="filtrarTareas('urgentes')">Urgentes</button>
+        </div>
+      </div>
+ 
+      <!-- Lista de tareas en grilla -->
+      <div class="columns is-multiline" id="lista-tareas-grilla">
+        <!-- Se carga dinámicamente -->
+      </div>
+    </main>
+  </div>
+ 
+  <!-- Modal Nueva/Editar Tarea -->
+  <div class="modal" id="modalTarea">
+    <div class="modal-background" data-close-modal></div>
+    <div class="modal-card">
+      <header class="modal-card-head">
+        <p class="modal-card-title" id="modal-titulo">
+          <i class="bi bi-plus-circle mr-2 has-text-info"></i>Nueva tarea
+        </p>
+        <button class="delete" aria-label="close" data-close-modal></button>
+      </header>
+      <section class="modal-card-body">
+        <form>
+          <div class="field">
+            <label class="label">Título</label>
+            <div class="control">
+              <input class="input" type="text" id="input-titulo" placeholder="Ej: Entregar taller de JS" />
+            </div>
+          </div>
+          <div class="field">
+            <label class="label">Descripción</label>
+            <div class="control">
+              <textarea class="textarea" id="input-descripcion" placeholder="Detalles de la tarea..."></textarea>
+            </div>
+          </div>
+          <div class="field">
+            <label class="label">Materia</label>
+            <div class="control">
+              <div class="select is-fullwidth">
+                <select id="select-materia-tarea">
+                  <option value="">-- Selecciona una materia --</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="columns">
+            <div class="column">
+              <div class="field">
+                <label class="label">Fecha de entrega</label>
+                <div class="control">
+                  <input class="input" type="date" id="input-fecha" />
+                </div>
+              </div>
+            </div>
+            <div class="column">
+              <div class="field">
+                <label class="label">Prioridad</label>
+                <div class="control">
+                  <div class="select is-fullwidth">
+                    <select id="input-prioridad">
+                      <option value="baja">Baja</option>
+                      <option value="media" selected>Media</option>
+                      <option value="alta">Alta</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </section>
+      <footer class="modal-card-foot is-justify-content-flex-end">
+        <button class="button" data-close-modal>Cancelar</button>
+        <button class="button btn-planify-primary" id="btn-guardar-tarea">
+          <i class="bi bi-save mr-1"></i>Guardar
+        </button>
+      </footer>
+    </div>
+  </div>
+ 
+  <script src="js/App.js"></script>
+</body>
+</html>

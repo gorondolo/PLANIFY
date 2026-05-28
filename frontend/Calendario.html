@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Planify - Calendario</title>
+ 
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" />
+ 
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@500;600;700&display=swap" rel="stylesheet" />
+ 
+  <link rel="stylesheet" href="css/Styles.css" />
+  <style>
+    .calendario {
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      padding: 2rem;
+    }
+    .calendario-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+    }
+    .calendario-mes {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #1E3A5F;
+    }
+    .dias-semana {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 10px;
+      margin-bottom: 1rem;
+    }
+    .dia-semana {
+      text-align: center;
+      font-weight: 600;
+      color: #4A90D9;
+      padding: 0.5rem;
+    }
+    .dias-mes {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 10px;
+    }
+    .dia {
+      aspect-ratio: 1;
+      border: 1px solid #e0e0e0;
+      border-radius: 4px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+      padding: 0.5rem;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .dia:hover {
+      background: #f5f5f5;
+      border-color: #4A90D9;
+    }
+    .dia-numero {
+      font-weight: 600;
+      color: #333;
+      font-size: 0.9rem;
+    }
+    .dia-tareas {
+      font-size: 0.6rem;
+      color: #F5A623;
+      margin-top: 2px;
+    }
+    .dia-hoy {
+      background: #E8F4F8;
+      border-color: #4A90D9;
+    }
+    .dia-otro-mes {
+      color: #ccc;
+      background: #fafafa;
+    }
+  </style>
+</head>
+<body>
+ 
+  <!-- =================== NAVBAR =================== -->
+  <nav class="navbar planify-navbar" role="navigation" aria-label="main navigation">
+    <div class="navbar-brand">
+      <div class="navbar-item">
+        <i class="bi bi-calendar2-check-fill mr-2"></i>
+        <strong>Planify</strong>
+      </div>
+      <a role="button" class="navbar-burger" id="navbar-burger" aria-label="menu">
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+      </a>
+    </div>
+ 
+    <div class="navbar-menu" id="navbarMenu">
+      <div class="navbar-start is-hidden-desktop">
+        <a class="navbar-item" href="index.html"><i class="bi bi-house-door mr-2"></i>Dashboard</a>
+        <a class="navbar-item" href="tareas.html"><i class="bi bi-list-check mr-2"></i>Tareas</a>
+        <a class="navbar-item" href="materias.html"><i class="bi bi-book mr-2"></i>Materias</a>
+        <a class="navbar-item" href="calendario.html"><i class="bi bi-calendar3 mr-2"></i>Calendario</a>
+      </div>
+ 
+      <div class="navbar-end">
+        <div class="navbar-item">
+          <span id="usuario-nombre"><i class="bi bi-person-circle mr-2"></i>Usuario</span>
+        </div>
+        <div class="navbar-item">
+          <a href="javascript:logout()" class="button is-small is-light" title="Cerrar sesión">
+            <i class="bi bi-box-arrow-right"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </nav>
+ 
+  <div class="columns is-gapless m-0">
+ 
+    <aside class="column is-2 planify-sidebar is-hidden-touch">
+      <div class="menu p-4">
+        <p class="menu-label">Navegación</p>
+        <ul class="menu-list">
+          <li><a href="index.html"><i class="bi bi-house-door mr-2"></i>Dashboard</a></li>
+          <li><a href="tareas.html"><i class="bi bi-list-check mr-2"></i>Tareas</a></li>
+          <li><a href="materias.html"><i class="bi bi-book mr-2"></i>Materias</a></li>
+          <li><a class="is-active" href="javascript:void(0)" style="cursor: default;"><i class="bi bi-calendar3 mr-2"></i>Calendario</a></li>
+        </ul>
+      </div>
+    </aside>
+ 
+    <main class="column planify-main p-5">
+ 
+      <!-- Header -->
+      <div class="mb-5">
+        <h1 class="title is-3 mb-1">Calendario</h1>
+        <p class="subtitle is-6 has-text-grey">Visualiza tus tareas en el calendario</p>
+      </div>
+ 
+      <!-- Calendario -->
+      <div class="calendario">
+        <div class="calendario-header">
+          <button class="button is-light" id="btn-mes-anterior">
+            <i class="bi bi-chevron-left"></i>
+          </button>
+          <div class="calendario-mes" id="mes-actual">Mayo 2026</div>
+          <button class="button is-light" id="btn-mes-siguiente">
+            <i class="bi bi-chevron-right"></i>
+          </button>
+        </div>
+
+        <div class="dias-semana">
+          <div class="dia-semana">Dom</div>
+          <div class="dia-semana">Lun</div>
+          <div class="dia-semana">Mar</div>
+          <div class="dia-semana">Mié</div>
+          <div class="dia-semana">Jue</div>
+          <div class="dia-semana">Vie</div>
+          <div class="dia-semana">Sáb</div>
+        </div>
+
+        <div class="dias-mes" id="dias-mes">
+          <!-- Se genera dinámicamente -->
+        </div>
+      </div>
+
+      <!-- Tareas en el día seleccionado -->
+      <div class="mt-5">
+        <div class="card">
+          <div class="card-header">
+            <p class="card-header-title">
+              <i class="bi bi-list-check mr-2"></i>Tareas del día <span id="fecha-seleccionada">Hoy</span>
+            </p>
+          </div>
+          <div class="card-content">
+            <ul id="tareas-dia-seleccionado">
+              <!-- Se carga dinámicamente -->
+            </ul>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+ 
+  <script src="js/App.js"></script>
+</body>
+</html>
