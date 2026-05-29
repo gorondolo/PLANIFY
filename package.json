@@ -1,0 +1,13 @@
+{
+  "name": "planify",
+  "version": "1.0.0",
+  "description": "Sistema de agenda estudiantil",
+  "main": "backend-node/server.js",
+  "scripts": {
+    "start": "cd backend-node && npm install && node server.js",
+    "dev": "cd backend-node && npm install && node server.js"
+  },
+  "keywords": [],
+  "author": "Miguel Angel Osorio",
+  "license": "ISC"
+}
