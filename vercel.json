@@ -1,10 +1,9 @@
 {
   "version": 2,
   "buildCommand": "cd backend-node && npm install",
-  "env": {
-    "SUPABASE_URL": "https://nmogpovisqrbdzwwbekw.supabase.co",
-    "SUPABASE_ANON_KEY": "sb_publishable_XBIgPRMVSkxZ7VYg_AL5fg_k-WvQsZZ",
-    "SUPABASE_SECRET_KEY": "sb_secret_NTtYK_g9sapy7iDXF-YWgQ_nFb5e0vi",
-    "PORT": "3000"
-  }
+  "startCommand": "cd backend-node && node server.js",
+  "routes": [
+    { "src": "/api/(.*)", "dest": "/backend-node/server.js" },
+    { "src": "/(.*)", "dest": "/frontend/$1" }
+  ]
 }
